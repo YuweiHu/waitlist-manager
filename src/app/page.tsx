@@ -19,7 +19,7 @@ import { TOTAL_SEATS } from "@/lib/constant";
 
 export default function HomePage() {
   const [name, setName] = useState("");
-  const [partySize, setPartySize] = useState<number | null>(null);
+  const [partySize, setPartySize] = useState<number>(1);
   const [partyId, setPartyId] = useState<string | null>(null);
   const [status, setStatus] = useState("");
   const [positionInQueue, setPositionInQueue] = useState(0);
@@ -27,7 +27,7 @@ export default function HomePage() {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    if (partyId && status !== "completed") {
+    if (partyId && !["completed", "ready"].includes(status)) {
       const interval = setInterval(() => {
         fetch(`/api/waitlist/status?partyId=${partyId}`)
           .then((res) => res.json())
@@ -102,7 +102,6 @@ export default function HomePage() {
       });
       const data = await res.json();
       if (data.success) {
-        alert("You have been seated. Enjoy your meal!");
         setStatus("serving");
       } else {
         setError(data.error);

@@ -27,7 +27,7 @@ export async function POST(request: Request) {
       );
     }
 
-    await party.remove();
+    await party.deleteOne();
 
     return NextResponse.json({ success: true });
   } catch (error) {
