@@ -1,6 +1,6 @@
 # Waitlist Manager
 
-Waitlist Manager is a full-stack application designed to handle the waitlist of a restaurant. It manages seating, queuing, and notifications for diners. The app replaces the traditional "pen & paper" solution, allowing diners to join a virtual waitlist, check their status, and check in when it's their turn.
+Waitlist Manager is a full-stack application designed to handle the waitlist of a restaurant. It manages seating, queuing for diners. The app replaces the traditional "pen & paper" solution, allowing diners to join a virtual waitlist, check their status, and check in when it's their turn.
 
 ## Table of Contents
 
