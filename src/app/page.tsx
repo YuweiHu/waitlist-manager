@@ -1,26 +1,12 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import {
-  Container,
-  TextField,
-  Button,
-  Typography,
-  Box,
-  CircularProgress,
-  Alert,
-  Stack,
-  Select,
-  MenuItem,
-  InputLabel,
-  FormControl,
-} from "@mui/material";
-import { TOTAL_SEATS } from "@/lib/constant";
+import { Container, Typography, Alert, Stack } from "@mui/material";
 import { Status } from "@/lib/type";
+import WaitlistForm from "@/components/WaitListForm";
+import StatusActions from "@/components/StatusActions";
 
 export default function HomePage() {
-  const [name, setName] = useState("");
-  const [partySize, setPartySize] = useState<number>(1);
   const [partyId, setPartyId] = useState<string | null>(null);
   const [status, setStatus] = useState<Status | null>(null);
   const [positionInQueue, setPositionInQueue] = useState(0);
@@ -41,12 +27,9 @@ export default function HomePage() {
 
       return () => clearInterval(interval);
     }
-    if (partyId && status === Status.Ready) {
-      // 20 sec 後 rejoin
-    }
   }, [partyId, status]);
 
-  const joinWaitlist = async () => {
+  const joinWaitlist = async (name: string, partySize: number) => {
     setLoading(true);
     setError("");
     try {
@@ -82,7 +65,7 @@ export default function HomePage() {
       const data = await res.json();
       if (data.success) {
         setPartyId(null);
-        setStatus("");
+        setStatus(null);
         setPositionInQueue(0);
       } else {
         setError(data.error);
@@ -120,61 +103,14 @@ export default function HomePage() {
 
   if (!partyId) {
     return (
-      <Container maxWidth="sm" sx={{ mt: 8 }}>
-        <Typography variant="h4" align="center" gutterBottom>
-          Join the Waitlist
-        </Typography>
-        {error && (
-          <Alert severity="error" sx={{ mb: 2 }}>
-            {error}
-          </Alert>
-        )}
-        <Box component="form" noValidate autoComplete="off">
-          <TextField
-            label="Your Name"
-            variant="outlined"
-            fullWidth
-            required
-            margin="normal"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          />
-          <FormControl fullWidth required margin="normal">
-            <InputLabel id="party-size-label">Party Size</InputLabel>
-            <Select
-              labelId="party-size-label"
-              id="party-size-select"
-              value={partySize}
-              label="Party Size"
-              onChange={(e) => setPartySize(Number(e.target.value))}
-            >
-              {[...Array(TOTAL_SEATS)].map((_, index) => (
-                <MenuItem key={index + 1} value={index + 1}>
-                  {index + 1}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-          <Button
-            variant="contained"
-            color="primary"
-            fullWidth
-            size="large"
-            onClick={joinWaitlist}
-            disabled={loading || !name || !partySize}
-            sx={{ mt: 3 }}
-          >
-            {loading ? <CircularProgress size={24} /> : "Join Waitlist"}
-          </Button>
-        </Box>
-      </Container>
+      <WaitlistForm onJoin={joinWaitlist} loading={loading} error={error} />
     );
   }
 
   return (
     <Container maxWidth="sm" sx={{ mt: 8 }}>
       <Typography variant="h4" align="center" gutterBottom>
-        Welcome, {name}
+        Welcome!
       </Typography>
       {error && (
         <Alert severity="error" sx={{ mb: 2 }}>
@@ -183,54 +119,16 @@ export default function HomePage() {
       )}
       <Stack spacing={2} sx={{ mt: 2 }}>
         <Typography variant="h6">
-          Status: <strong>{status.toUpperCase()}</strong>
+          Status: <strong>{status && status.toUpperCase()}</strong>
         </Typography>
-        {status === Status.Waiting && (
-          <>
-            <Typography variant="body1">
-              Your position in queue: <strong>{positionInQueue}</strong>
-            </Typography>
-            <Button
-              variant="outlined"
-              color="secondary"
-              fullWidth
-              size="large"
-              onClick={leaveWaitlist}
-              disabled={loading}
-            >
-              {loading ? <CircularProgress size={24} /> : "Leave Waitlist"}
-            </Button>
-          </>
-        )}
-        {status === Status.Serving && (
-          <Typography variant="body1">
-            You are currently being served.
-          </Typography>
-        )}
-        {status === Status.Ready && (
-          <Button
-            variant="contained"
-            color="success"
-            fullWidth
-            size="large"
-            onClick={checkIn}
-            disabled={loading}
-          >
-            {loading ? <CircularProgress size={24} /> : "Check-in"}
-          </Button>
-        )}
-        {status === Status.Completed && (
-          <Button
-            variant="contained"
-            color="success"
-            fullWidth
-            size="large"
-            onClick={() => setPartyId(null)}
-            disabled={loading}
-          >
-            {"Back to Waiting List"}
-          </Button>
-        )}
+        <StatusActions
+          status={status!}
+          positionInQueue={positionInQueue}
+          loading={loading}
+          leaveWaitlist={leaveWaitlist}
+          checkIn={checkIn}
+          setPartyId={setPartyId}
+        />
       </Stack>
     </Container>
   );
