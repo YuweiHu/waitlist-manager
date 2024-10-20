@@ -27,7 +27,8 @@ export async function GET(request: Request) {
 
     // Calculate available seats
     const servingParties = await Party.find({ status: Status.Serving });
-    const occupiedSeats = servingParties.reduce(
+    const readyParties = await Party.find({ status: Status.Ready });
+    const occupiedSeats = [...servingParties, ...readyParties].reduce(
       (sum, cur) => sum + cur.partySize,
       0
     );
@@ -55,7 +56,7 @@ export async function GET(request: Request) {
 
     // Calculate position in queue
     const partiesAhead = await Party.countDocuments({
-      status: Status.Waiting,
+      status: { $in: [Status.Waiting, Status.Ready] },
       joinedAt: { $lt: party.joinedAt },
     });
 

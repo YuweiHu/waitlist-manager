@@ -1,5 +1,14 @@
-import React from "react";
-import { Typography, Button, CircularProgress, Stack } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import {
+  Typography,
+  Button,
+  CircularProgress,
+  Stack,
+  Dialog,
+  DialogTitle,
+  DialogActions,
+  DialogContent,
+} from "@mui/material";
 import { Status } from "@/lib/type";
 
 interface StatusActionsProps {
@@ -19,6 +28,14 @@ const StatusActions: React.FC<StatusActionsProps> = ({
   checkIn,
   setPartyId,
 }) => {
+  const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    if (positionInQueue === 1) {
+      setOpen(true);
+    }
+  }, [positionInQueue]);
+
   return (
     <Stack spacing={2} sx={{ mt: 2 }}>
       {status === Status.Waiting && (
@@ -36,6 +53,13 @@ const StatusActions: React.FC<StatusActionsProps> = ({
           >
             {loading ? <CircularProgress size={24} /> : "Leave Waitlist"}
           </Button>
+          <Dialog open={open} fullWidth>
+            <DialogTitle>Notification</DialogTitle>
+            <DialogContent>Good news! You are the next one!</DialogContent>
+            <DialogActions>
+              <Button onClick={() => setOpen(false)}>Confirm</Button>
+            </DialogActions>
+          </Dialog>
         </>
       )}
       {status === Status.Serving && (

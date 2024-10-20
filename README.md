@@ -13,16 +13,12 @@ Waitlist Manager is a full-stack application designed to handle the waitlist of 
 - [Usage](#usage)
 - [License](#license)
 
----
-
 ## Features
 
 - **Virtual Waitlist**: Diners can join the waitlist by entering their name and party size.
 - **Real-time Status Updates**: Diners can check their position in the queue and status in real-time.
 - **Check-in System**: When it's their turn, diners can check in to get seated.
-- **Automatic Queue Management**: The system manages seat availability and notifies the next party when seats are available.
-- **Service Time Calculation**: Service time is calculated based on party size (3 seconds per person).
-- **Responsive UI**: User-friendly interface built with Material-UI (MUI) for a seamless experience.
+- **Automatic Queue Management**: The system manages seat availability when seats are available.
 
 ## Tech Stack
 
@@ -113,11 +109,3 @@ The application will be running at `http://localhost:3000`.
 
 4. **Leave Waitlist**:
    - At any point while waiting, you can click **Leave Waitlist** to remove yourself from the queue.
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
----
-
-Feel free to reach out if you have any questions or need further assistance!
