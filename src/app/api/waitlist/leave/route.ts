@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import dbConnect from "../../../../lib/mongodb";
 import Party from "../../../../models/Party";
+import { Status } from "@/lib/type";
 
 export async function POST(request: Request) {
   try {
@@ -20,7 +21,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Party not found" }, { status: 404 });
     }
 
-    if (["serving", "completed"].includes(party.status)) {
+    if ([Status.Serving, Status.Completed].includes(party.status)) {
       return NextResponse.json(
         { error: "Cannot leave waitlist after checking in" },
         { status: 400 }

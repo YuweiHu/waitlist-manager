@@ -16,18 +16,19 @@ import {
   FormControl,
 } from "@mui/material";
 import { TOTAL_SEATS } from "@/lib/constant";
+import { Status } from "@/lib/type";
 
 export default function HomePage() {
   const [name, setName] = useState("");
   const [partySize, setPartySize] = useState<number>(1);
   const [partyId, setPartyId] = useState<string | null>(null);
-  const [status, setStatus] = useState("");
+  const [status, setStatus] = useState<Status | null>(null);
   const [positionInQueue, setPositionInQueue] = useState(0);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
   useEffect(() => {
-    if (partyId && !["completed", "ready"].includes(status)) {
+    if (partyId && ![Status.Completed, Status.Ready].includes(status!)) {
       const interval = setInterval(() => {
         fetch(`/api/waitlist/status?partyId=${partyId}`)
           .then((res) => res.json())
@@ -36,9 +37,12 @@ export default function HomePage() {
             setPositionInQueue(data.positionInQueue);
           })
           .catch((err) => console.error(err));
-      }, 1000);
+      }, 1500);
 
       return () => clearInterval(interval);
+    }
+    if (partyId && status === Status.Ready) {
+      // 20 sec 後 rejoin
     }
   }, [partyId, status]);
 
@@ -54,7 +58,7 @@ export default function HomePage() {
       const data = await res.json();
       if (data.success) {
         setPartyId(data.partyId);
-        setStatus("waiting");
+        setStatus(Status.Waiting);
       } else {
         setError(data.error);
       }
@@ -102,7 +106,7 @@ export default function HomePage() {
       });
       const data = await res.json();
       if (data.success) {
-        setStatus("serving");
+        setStatus(Status.Serving);
       } else {
         setError(data.error);
       }
@@ -181,7 +185,7 @@ export default function HomePage() {
         <Typography variant="h6">
           Status: <strong>{status.toUpperCase()}</strong>
         </Typography>
-        {status === "waiting" && (
+        {status === Status.Waiting && (
           <>
             <Typography variant="body1">
               Your position in queue: <strong>{positionInQueue}</strong>
@@ -198,12 +202,12 @@ export default function HomePage() {
             </Button>
           </>
         )}
-        {status === "serving" && (
+        {status === Status.Serving && (
           <Typography variant="body1">
             You are currently being served.
           </Typography>
         )}
-        {status === "ready" && (
+        {status === Status.Ready && (
           <Button
             variant="contained"
             color="success"
@@ -213,6 +217,18 @@ export default function HomePage() {
             disabled={loading}
           >
             {loading ? <CircularProgress size={24} /> : "Check-in"}
+          </Button>
+        )}
+        {status === Status.Completed && (
+          <Button
+            variant="contained"
+            color="success"
+            fullWidth
+            size="large"
+            onClick={() => setPartyId(null)}
+            disabled={loading}
+          >
+            {"Back to Waiting List"}
           </Button>
         )}
       </Stack>

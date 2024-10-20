@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import dbConnect from "../../../../lib/mongodb";
 import Party from "../../../../models/Party";
 import { TOTAL_SEATS } from "@/lib/constant";
+import { Status } from "@/lib/type";
 
 export async function GET(request: Request) {
   try {
@@ -20,28 +21,29 @@ export async function GET(request: Request) {
     // Update any completed services
     const now = new Date();
     await Party.updateMany(
-      { status: "serving", serviceEndTime: { $lte: now } },
-      { $set: { status: "completed" } }
+      { status: Status.Serving, serviceEndTime: { $lte: now } },
+      { $set: { status: Status.Completed } }
     );
 
     // Calculate available seats
-    const servingParties = await Party.find({ status: "serving" });
+    const servingParties = await Party.find({ status: Status.Serving });
     const occupiedSeats = servingParties.reduce(
-      (sum, p) => sum + p.partySize,
+      (sum, cur) => sum + cur.partySize,
       0
     );
     let availableSeats = TOTAL_SEATS - occupiedSeats;
 
     // Check for parties that can be moved to 'ready'
-    const waitingParties = await Party.find({ status: "waiting" }).sort({
+    const waitingParties = await Party.find({ status: Status.Waiting }).sort({
       joinedAt: 1,
     });
 
     for (const party of waitingParties) {
-      if (party.partySize <= availableSeats) {
-        await Party.findByIdAndUpdate(party._id, { status: "ready" });
-        availableSeats -= party.partySize;
+      if (party.partySize > availableSeats) {
+        break;
       }
+      await Party.findByIdAndUpdate(party._id, { status: Status.Ready });
+      availableSeats -= party.partySize;
     }
 
     // Get party status
@@ -53,7 +55,7 @@ export async function GET(request: Request) {
 
     // Calculate position in queue
     const partiesAhead = await Party.countDocuments({
-      status: "waiting",
+      status: Status.Waiting,
       joinedAt: { $lt: party.joinedAt },
     });
 

@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import dbConnect from "../../../../lib/mongodb";
 import Party from "../../../../models/Party";
 import { PERSON_SERVICE_TIME_MS } from "@/lib/constant";
+import { Status } from "@/lib/type";
 
 export async function POST(request: Request) {
   try {
@@ -22,7 +23,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Party not found" }, { status: 404 });
     }
 
-    if (party.status !== "ready") {
+    if (party.status !== Status.Ready) {
       return NextResponse.json(
         { error: "Party is not ready to check-in" },
         { status: 400 }
@@ -33,7 +34,7 @@ export async function POST(request: Request) {
     const serviceTime = party.partySize * PERSON_SERVICE_TIME_MS;
     const serviceEndTime = new Date(Date.now() + serviceTime);
 
-    party.status = "serving";
+    party.status = Status.Serving;
     party.serviceEndTime = serviceEndTime;
     await party.save();
 

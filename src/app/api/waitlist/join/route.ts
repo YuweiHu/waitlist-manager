@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import dbConnect from "../../../../lib/mongodb";
 import Party from "../../../../models/Party";
+import { Status } from "@/lib/type";
 
 export async function POST(request: Request) {
   try {
@@ -15,7 +16,7 @@ export async function POST(request: Request) {
 
     await dbConnect();
 
-    const newParty = new Party({ name, partySize, status: "waiting" });
+    const newParty = new Party({ name, partySize, status: Status.Waiting });
     await newParty.save();
 
     return NextResponse.json({ success: true, partyId: newParty._id });
