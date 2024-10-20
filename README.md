@@ -31,7 +31,7 @@ Waitlist Manager is a full-stack application designed to handle the waitlist of 
   - [Next.js](https://nextjs.org/) (App Router)
   - [React.js](https://reactjs.org/)
   - [TypeScript](https://www.typescriptlang.org/)
-  - [Material-UI (MUI)](https://mui.com/)
+  - [Material-UI](https://mui.com/)
 
 - **Backend**:
 
@@ -39,35 +39,28 @@ Waitlist Manager is a full-stack application designed to handle the waitlist of 
   - [MongoDB](https://www.mongodb.com/)
   - [Mongoose](https://mongoosejs.com/)
 
-- **Others**:
-  - [Node.js](https://nodejs.org/)
-  - [npm](https://www.npmjs.com/)
-
 ## Project Structure
 
 ```
-waitlist-manager/
+waitlist-manager/src
 ├── app/
 │   ├── api/
 │   │   └── waitlist/
-│   │       ├── join/
-│   │       ├── leave/
-│   │       ├── check-in/
-│   │       └── status/
+│   │       ├── join/route.ts
+│   │       ├── leave/route.ts
+│   │       ├── check-in/route.ts
+│   │       └── status/route.ts
 │   ├── page.tsx
 │   └── layout.tsx
+├── components
+│   ├── StatusActions.tsx
+│   └── WaitlistForm.tsx
 ├── lib/
 │   ├── mongodb.ts
 │   ├── constant.ts
 │   └── type.ts
-├── models/
-│   └── Party.ts
-├── public/
-├── styles/
-├── .env.local
-├── package.json
-├── tsconfig.json
-└── README.md
+└── models/
+    └── Party.ts
 ```
 
 ## Installation
