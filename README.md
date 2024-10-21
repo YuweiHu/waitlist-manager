@@ -28,7 +28,6 @@ Waitlist Manager is a full-stack application designed to handle the waitlist of 
   - [Material-UI](https://mui.com/)
 
 - **Backend**:
-
   - [Next.js API Routes](https://nextjs.org/docs/api-routes/introduction)
   - [MongoDB](https://www.mongodb.com/)
   - [Mongoose](https://mongoosejs.com/)
