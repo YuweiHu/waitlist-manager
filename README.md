@@ -8,10 +8,8 @@ Waitlist Manager is a full-stack application designed to handle the waitlist of 
 - [Tech Stack](#tech-stack)
 - [Project Structure](#project-structure)
 - [Installation](#installation)
-- [Environment Variables](#environment-variables)
 - [Running the Application](#running-the-application)
 - [Usage](#usage)
-- [License](#license)
 
 ## Features
 
