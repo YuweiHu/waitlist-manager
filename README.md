@@ -7,6 +7,7 @@ Waitlist Manager is a full-stack application designed to handle the waitlist of 
 - [Features](#features)
 - [Tech Stack](#tech-stack)
 - [Project Structure](#project-structure)
+- [System Architecture](#system-architecture)
 - [Installation](#installation)
 - [Running the Application](#running-the-application)
 - [Usage](#usage)
@@ -56,6 +57,29 @@ waitlist-manager/src
 └── models/
     └── Party.ts
 ```
+
+## System Architecture
+
+### Overview
+
+![system-design](/src/img/system.png)
+
+### Frontend Components
+
+- HomePage: Main page where customers can join the waitlist or view their status.
+- WaitlistForm: Component for collecting customer name and party size.
+- StatusActions: Displays actions based on the customer's current status.
+
+### API Routes
+
+- `/api/waitlist/join`: Handles adding new parties to the waitlist.
+- `/api/waitlist/status`: Provides the current status and position in the queue for a party.
+- `/api/waitlist/check-in`: Allows parties to check in when their status is Ready.
+- `/api/waitlist/leave`: Removes a party from the waitlist.
+
+### Database Model
+
+- `Party` Model: Represents a party in the waitlist with fields like name, partySize, status, etc.
 
 ## Installation
 
