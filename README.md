@@ -28,6 +28,7 @@ Waitlist Manager is a full-stack application designed to handle the waitlist of 
   - [Material-UI](https://mui.com/)
 
 - **Backend**:
+
   - [Next.js API Routes](https://nextjs.org/docs/api-routes/introduction)
   - [MongoDB](https://www.mongodb.com/)
   - [Mongoose](https://mongoosejs.com/)
@@ -73,7 +74,7 @@ waitlist-manager/src
 
 3. **Database**:
 
-   make sure db run locally. If you need any help, check [this](https://zellwk.com/blog/local-mongodb/).
+   make sure mongoDB run locally. If you need any help, check [this](https://zellwk.com/blog/local-mongodb/).
 
 ## Running the Application
 
