@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { Container, Typography, Alert, Stack } from "@mui/material";
 import { Status } from "@/lib/type";
-import WaitlistForm from "@/components/WaitListForm";
+import WaitlistForm from "@/components/WaitlistForm";
 import StatusActions from "@/components/StatusActions";
 
 export default function HomePage() {
