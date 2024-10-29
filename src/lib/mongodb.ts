@@ -1,6 +1,7 @@
 import mongoose, { Connection } from "mongoose";
 
-const MONGODB_URI: string = "mongodb://localhost:27017/local";
+const MONGODB_URI: string =
+  process.env.MONGODB_URI || "mongodb://localhost:27017/local";
 
 let cachedConnection: Connection | null = null;
 
